@@ -1,15 +1,36 @@
-<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
     <id>com.github.lennypu.cuboxmemo</id>
-    <name>CuboxMemo</name>
+    <name>Cubox Memo</name>
     <vendor>lennypu</vendor>
-
+    
     <depends>com.intellij.modules.platform</depends>
 
-    <resource-bundle>messages.MyBundle</resource-bundle>
-
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.github.lennypu.cuboxmemo.toolWindow.MyToolWindowFactory" id="MyToolWindow"/>
-        <postStartupActivity implementation="com.github.lennypu.cuboxmemo.startup.MyProjectActivity" />
+        <!-- Service for API communication -->
+        <applicationService serviceImplementation="com.github.lennypu.cuboxmemo.services.CuboxMemoService"/>
+        
+        <!-- Settings -->
+        <applicationConfigurable 
+            parentId="tools" 
+            instance="com.github.lennypu.cuboxmemo.settings.CuboxMemoSettingsConfigurable"
+            id="com.github.lennypu.cuboxmemo.settings.CuboxMemoSettingsConfigurable" 
+            displayName="Cubox Memo"/>
+        <applicationService serviceImplementation="com.github.lennypu.cuboxmemo.settings.CuboxMemoSettings"/>
+        
+        <!-- Notification Group -->
+        <notificationGroup id="Cubox Memo Notification Group" 
+                          displayType="BALLOON" 
+                          toolWindowId="Terminal"
+                          isLogByDefault="false"/>
     </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="CuboxMemo.Send" 
+                class="com.github.lennypu.cuboxmemo.actions.CuboxMemoAction" 
+                text="Cubox Memo" 
+                description="Send clipboard content to Cubox as a memo">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
